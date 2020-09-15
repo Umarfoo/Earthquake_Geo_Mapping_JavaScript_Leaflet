@@ -11,6 +11,8 @@ html {
   height: 100%;
 }
 
+/* Legend and info box css */
+
 .legend {
   line-height: 18px;
   color: #555;

@@ -1,9 +1,9 @@
-// Store our API endpoint inside queryUrl
-
+// Defining function to develop the URL for geoJson
 function buildUrl(){
     return `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson`;
 }
 
+// Defining function to choose color optins based on Magnitude
 function getColor(d) {
     return d > 5  ? '#f06b6b' :
     d > 4  ? '#f0a76b' :
@@ -15,15 +15,14 @@ function getColor(d) {
 
 function createFeatures(earthquakeData) {
 
-    // Define a function we want to run once for each feature in the features array
-    // Give each feature a popup describing the place and time of the earthquake
+    // Defining a function to run once for each feature in the features array
+    // Give each feature a popup describing the place, maginitude and time of the earthquake
     function onEachFeature(feature, layer) {
         layer.bindPopup("<h3>" + feature.properties.place +
         "</h3><hr><p>Magnitude: "+ feature.properties.mag + "</p><p>" + new Date(feature.properties.time) + "</p>");
     }
 
-    // Create a GeoJSON layer containing the features array on the earthquakeData object
-    // Run the onEachFeature function once for each piece of data in the array
+    // Creating a GeoJSON layer with the features array on the earthquakeData object
     const earthquakes = L.geoJSON(earthquakeData, {
         pointToLayer: function(feature, latlng) {
             return new L.CircleMarker(latlng, {
@@ -35,16 +34,17 @@ function createFeatures(earthquakeData) {
               fillOpacity: 0.8
             });
         },
+        // Run the onEachFeature function once for each piece of data in the array
         onEachFeature: onEachFeature
     });
 
-    // Sending our earthquakes layer to the createMap function
+    // Sending earthquakes layer to the createMap function
     createMap(earthquakes);
 }
 
 function createMap(earthquakes) {
 
-    // Define streetmap and darkmap layers
+    // Defining streetmap, greyscale and darkmap layers maps
     const streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
             attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
             maxZoom: 18,
@@ -66,41 +66,42 @@ function createMap(earthquakes) {
             accessToken: API_KEY
     });
 
-    // Define a baseMaps object to hold our base layers
+    // Defiing a baseMaps object to hold base layers
     const baseMaps = {
             "Street Map": streetmap,
             "Dark Map": darkmap,
             "Grey Scale": greyScale
     };
 
-    // Create overlay object to hold our overlay layer
+    // Creating overlay object to hold overlay layer
     const overlayMaps = {
             Earthquakes: earthquakes
     };
 
-    // Create our map, giving it the streetmap and earthquakes layers to display on load
+    // Creating map, giving it the Grey Scale map and earthquakes layers to display on load
     const myMap = L.map("map", {
             center: [37.09, -95.71],
             zoom: 5,
             layers: [greyScale, earthquakes]
     });
 
-    // Create a layer control
-    // Pass in our baseMaps and overlayMaps
-    // Add the layer control to the map
+    // Creating a layer control, Passing in our baseMaps and overlayMaps and Adding the layer control to the map
     L.control.layers(baseMaps, overlayMaps, {
             collapsed: false
     }).addTo(myMap);
 
+    // Creating layer control for legends
     var legend = L.control({position: 'bottomright'});
 
+    // Creating function to make legends depending on colors and maginitude divisions
     legend.onAdd = function (map) {
 
+        // Adding legend for colors using Dom create
         var div = L.DomUtil.create('div', 'info legend'),
             grades = [0, 1, 2, 3, 4, 5],
             labels = [];
             
-        // loop through our fire intervals and generate a label with a colored square for each interval
+        // loop through earthquake intervals and generate a label with a colored square for each interval
         for (var i = 0; i < grades.length; i++) {
             //div.innerHTML = '<h1>hello</h1>'
             div.innerHTML +=
@@ -115,10 +116,10 @@ function createMap(earthquakes) {
 }
 
 
-
+// Creating async function to make process data for mapping
 (async function(){
     const queryUrl = buildUrl();
     const data = await d3.json(queryUrl);
-    // Once we get a response, send the data.features object to the createFeatures function
+    // Sending the data.features object to the createFeatures function
     createFeatures(data.features);
 })()
