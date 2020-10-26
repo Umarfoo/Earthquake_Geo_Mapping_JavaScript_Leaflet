@@ -1,8 +1,6 @@
 # leaflet-challenge
 
-Click here to access the [website.](https://umarfoo.github.io/leaflet-challenge/)
-
--------------------------------------
+[Click here](https://umarfoo.github.io/leaflet-challenge/) to access the website.
 
 ## Background
 
@@ -23,7 +21,5 @@ The USGS is interested in building a new set of tools that will allow them visua
    * Include popups that provide additional information about the earthquake when a marker is clicked.
 
    * Create a legend that will provide context for your map data.
-
-   * Your visualization should look something like the map above.
 
 - - -
