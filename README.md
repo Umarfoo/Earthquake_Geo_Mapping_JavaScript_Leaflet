@@ -1,6 +1,6 @@
 # JavaScript Leaflet - Earthquake Geo Mapping
 
-[Click here](https://umarfoo.github.io/leaflet-challenge/) to access the website.
+[Click here](https://umarfoo.github.io/Earthquake_Geo_Mapping_JavaScript_Leaflet/) to access the website.
 
 ## Project Background
 
